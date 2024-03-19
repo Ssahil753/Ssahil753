@@ -2,6 +2,7 @@
 - 👀 I’m interested in coding
 - 🌱 I’m currently learning java
 - 💞️ I’m looking to collaborate
+- Full Stack Python Developer |HTML, CSS, JavaScript, Python ,MySQL | Increasing Website Performance and User Engagement.
 -  📫 How to reach me
 -  contact:8788276538
 -  Linkedin:www.linkedin.com/in/sahiljha7
