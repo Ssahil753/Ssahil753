@@ -1,7 +1,6 @@
 - 👋 Hi, I’m @Ssahil753
 - 👀 I’m interested in coding
-- 🌱 I’m currently learning java
-- 💞️ I’m looking to collaborate
+- 🌱 I’m currently learning Wordpress
 - Full Stack Python Developer |HTML, CSS, JavaScript, Python ,MySQL | Increasing Website Performance and User Engagement.
 -  📫 How to reach me
 -  contact:8788276538
