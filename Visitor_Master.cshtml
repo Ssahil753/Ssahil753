@@ -1,0 +1,632 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Visitor.cshtml";
+}
+<input type="hidden" id="data_uri" />
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    @*var rootUrl = '@Url.Content("http://10.9.236.41/citizen/")';*@
+        $(document).ready(function () {
+
+        });
+</script>
+<body>
+@*     <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <th align="center"><u>Live Camera</u></th>
+            <th align="center"><u>Captured Picture</u></th>
+        </tr>
+        <tr>
+            <td><div id="webcam"></div></td>
+            <td><img id="imgCapture" /></td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input type="button" id="btnCapture" value="Capture" />
+            </td>
+            <td align="center">
+                <input type="button" id="btnUpload" value="Upload" disabled="disabled" />
+            </td>
+        </tr>
+    </table> *@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            Webcam.set({
+                width: 150,
+                height: 100,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+            Webcam.attach('#webcam');
+            $("#btnCapture").click(function () {
+                Webcam.snap(function (data_uri) {
+                    $("#imgCapture")[0].src = data_uri;                                   
+                    $('#data_uri').val(data_uri);
+                    $("#btnUpload").removeAttr("disabled");
+                });
+            });
+            $("#btnUpload").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SaveCapturedImage",
+                    data: { data: $("#imgCapture")[0].src },
+                    success: function (r) { }
+                });
+            });
+        });
+    </script>
+</body>
+<div class="rightBar" id="pagecontent" >
+    <div class="col-md-12 pt-2">
+        <div class="row">
+            <div class="col-md-12   ">
+                <div class="form-group">
+                  @*   <form  enctype="multipart/form-data"> *@
+                 <form method="post"  onsubmit="return Validate()" enctype="multipart/form-data">
+                    <div class="col-md-12 pt-2">
+                            <h3>Add New Visitor</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                  <table border="0" cellpadding="0" cellspacing="0">
+@*  <tr>
+                                        <th align="center"><u>Live Camera</u></th>
+                                        <th align="center"><u>Captured Picture</u></th>
+                                    </tr> *@
+                                    <tr>
+                                        <td><div id="webcam"></div></td>
+                                        <td>     </td>
+                                         <td >
+                                                    <input type="button" id="btnCapture" class="btn btn-success" value="Capture"  />
+                                         
+@*<input type="button" id="btnUpload" class="btn btn-success" value="Upload" disabled="disabled" /> *@
+                                        </td>     
+                                        <td>     </td>
+                                                <td>
+                                                    <img id="imgCapture" style="padding-left: 10px;" />
+                                                </td>
+                                    </tr>
+                                    <tr>
+                                       
+                                    </tr>
+                                </table>
+
+                                 </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Visitor Name :
+                                        <input id="Visitor_Name" class="form-control" name="Visitor_Name" type="text" oninput="capitalizeWords(event) ;validateVisitorName(event)">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Mobile No :
+                                        <input id="Mobile_No" name="Mobile_No" class="form-control" type="text" maxlength="10" oninput="validateMobileNo(event)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Email Id :
+                                        <input id="Email_Id" name="email_id" class="form-control" type="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Address :
+                                        <input id="Address" name="Address" class="form-control" type="text" maxlength="30">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Whom To Meet :
+                                        <select id="Whom_To_Meet" class="form-control" name="Whom_To_Meet">
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Department :
+                                        <select id="Department" class="form-control"  name="Department">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Purpose of visit :
+                                        <select id="Purpose_Of_Visit" class="form-control" name="Purpose_Of_Visit">
+                                            <option value="Select">---Select---</option>
+                                            <option value="Official">Official</option>
+                                            <option value="Personal">Personal </option> 
+                                            <option value="Delivery"> Delivery</option>
+                                            <option value="Interview">Interview</option>
+                                            <option value="Maintence">Maintence</option>
+                                        </select>                                       
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Category :
+                                        <select id="Category" class="form-control" name="Category">
+                                            <option value="Select">None</option>
+                                            <option value="Vendor">Vendor</option>
+                                            <option value="JobCandidate">Job Candidate </option>
+                                            <option value="Contractor"> Contractor</option>
+                                            <option value="VIP">VIP</option>
+                                            <option value="Guest">Guest</option>
+                                            <option value="Intern">Intern</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                   
+                            @*     <div class="col-md-6"> *@
+                            @*         <div class="form-group"> *@
+                            @*             Aadhaar Number :<span style="color:Red"></span> *@
+                            @*             <input id="Aadhaar_Number" name="Aadhaar_Number" class="form-control" maxlength="12" type="text"> *@
+                            @*         </div> *@
+                            @*     </div> *@
+                            @* </div> *@
+
+                            @* <div class="row"> *@
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        Electronic Accessories :
+                                        <select id="Electronic_Accessories" class="form-control" name="Electronic_Accessories">
+                                            <option value="None">None</option>
+                                            <option value="Laptop">Laptop</option>
+                                            <option value="Pen_Drive">Pen Drive</option>
+                                            <option value="USB_Hard_Disk">USB Hard Disk</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            
+
+                           <div class="newrow" style="display: -webkit-box; display: -ms-flexbox; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                                <div class="col-md-6" id="Brand">
+                                    <div class="form-group">
+                                        Brand :
+                                        <select id="Make" class="form-control" name="Reason_To_Meet">
+                                            <option value="Select">---None---</option>
+                                            <option value="Apple">Apple</option>
+                                            <option value="Dell">Dell</option>
+                                            <option value="HP">HP</option>
+                                            <option value="Lenovo">Lenovo</option>
+                                            <option value="Toshiba">Toshiba</option>
+                                            <option value="Acer">Acer</option>
+                                            <option value="Apple">Apple</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="SN">
+                                    <div class="form-group">
+                                        Serial Number :
+                                            <input id="Serial_Number" name="Serial_Number" class="form-control" type="text" maxlength="30">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="padding-left:44%">
+                                <div class="row">
+                                <div class="col-md-12  text-center">
+                                    <div class="form-group">
+                                        <span style="color:green"> @TempData["Result"] </span>
+                                        
+                                        <input id="Save" type="submit" class="btn btn-success" value="Submit" />
+                                        <input type="button" id="Close"  data-dismiss="modal" class="btn btn-warning" value="Close" />
+                                        @*  <input type="button" onclick="Print();" id="Edit" class="btn btn-success" value="Print" /> *@
+                                        <br />
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<script>
+    $(document).ready(function () {
+        var rootUrl = '@Url.Content("~/")';
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+        $('#Save').val("Submit");        
+        Fill_Department();
+        Fill_Employee();
+          $('#Brand').css('visibility', 'hidden');
+          $('#SN').css('visibility', 'hidden');
+        Field_Visible();
+    });
+</script>
+<script>
+    // Function to ensure only alphabets and spaces in the Visitor Name field
+    function validateVisitorName(event) {
+        let inputValue = event.target.value;
+        // Remove anything that is not an alphabet or space
+        event.target.value = inputValue.replace(/[^a-zA-Z\s]/g, '');
+    }
+
+    // Function to ensure only numbers in the Mobile No field
+    function validateMobileNo(event) {
+        let inputValue = event.target.value;
+        // Remove anything that is not a number
+        event.target.value = inputValue.replace(/[^0-9]/g, '');
+    }
+
+    // Function to capitalize the first letter of each word in the Visitor Name
+    function capitalizeWords(event) {
+        let inputValue = event.target.value;
+        event.target.value = inputValue.replace(/\b\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
+</script>
+
+<script>
+    $('#Close').click(function () {
+        Clear_Data();
+    });
+</script>
+<script>
+    $('#Save').click(function () 
+    {        
+        Insert_Visitor();
+    });
+ </script>
+<script>
+    // Function to capitalize the first letter of each word
+    function capitalizeWords(event) {
+        let inputValue = event.target.value;
+        // Capitalizing the first letter of each word and making the rest lowercase
+        event.target.value = inputValue
+            .split(' ')  // Split the input by spaces into an array of words
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())  // Capitalize each word
+            .join(' ');  // Join the words back with a space
+    }
+</script>
+<script type="text/javascript">
+    function Insert_Visitor() 
+    {
+        var res = Validate();
+        if (res == false) {
+            return false;
+        }
+        
+        var Data =
+        {
+            Visitor_Name: $('#Visitor_Name').val(),
+            Email_Id: $('#Email_Id').val(),
+            Mobile_No: $('#Mobile_No').val(),
+            Address: $('#Address').val(),
+            Whom_To_Meet: $('#Whom_To_Meet').val(),
+            Dept_Id: $('#Department').val(),
+            Purpose_Of_Visit: $('#Purpose_Of_Visit').val(),
+            Category:$('#Category').val(),
+            Electronic_Accessories: $('#Electronic_Accessories').val(),          
+            Make: $('#Make').val(),
+            Serial_Number: $('#Serial_Number').val(),
+            Photo :  $("#imgCapture")[0].src ,           
+        };
+        $.ajax({
+            url: rootUrl + "api/Visitor_Master/Insert_Visitor",
+            type: "Post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (result) {                
+                    alert("Record is Saved Successfully.");               
+                    Clear_Data();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function Clear_Data() 
+    {
+        $('#Visitor_Name').val("");
+        $('#Email_Id').val("");
+        $('#Mobile_No').val("");
+        $('#Address').val("");
+       // $('#Whom_To_Meet').val("");    
+        $('#Save').val("Add");
+    }
+</script>
+
+<script type="text/javascript">
+    function Validate() {
+        var isValid = true;
+       
+        var Photo = $.trim($("#data_uri").val()).length;        
+        if (Photo == 0) 
+        {
+            alert('Photo should not be blank.');
+            $('#imgCapture').focus();
+            isValid = false;
+            return false;
+        }
+           var Visitor_Name = $.trim($("#Visitor_Name").val()).length;
+    if (Visitor_Name == 0) {
+        alert('Name should not be blank.');
+        $('#Visitor_Name').focus();
+        isValid = false;
+        return false;
+    }
+
+    // Validate Name to accept only alphabets (allow spaces, e.g., for first and last name)
+    var namePattern = /^[A-Za-z\s]+$/;
+    if (!namePattern.test($("#Visitor_Name").val())) {
+        alert('Name should contain only alphabets.');
+        $('#Visitor_Name').focus();
+        isValid = false;
+        return false;
+    }
+
+    var Mobile_No = $.trim($("#Mobile_No").val()).length;
+    if (Mobile_No == 0) {
+        alert('Mobile No should not be blank.');
+        $('#Mobile_No').focus();
+        isValid = false;
+        return false;
+    }
+
+    // Validate Mobile No to accept only numeric values (no alphabets, special characters)
+    var mobilePattern = /^[0-9]+$/;
+    if (!mobilePattern.test($("#Mobile_No").val())) {
+        alert('Mobile No should contain only numeric values.');
+        $('#Mobile_No').focus();
+        isValid = false;
+        return false;
+    }
+
+        var Address = $.trim($("#Address").val()).length;
+        if (Address == 0) {
+            alert('Address Type should not be blank.');
+            $('#Address').focus();
+            isValid = false;
+            return false;
+        }
+        var Department = $('#Department').val();
+        if (Department == "-1") {
+            alert('Please Select Department.');
+            $('#Department').focus();
+            isValid = false;
+            return false;
+        }
+
+        var Purpose_Of_Visit = $('#Purpose_Of_Visit').val();
+        if (Purpose_Of_Visit   == "-1") {
+            alert('Please Select Purpose Of Visit.');
+            $('#Purpose_Of_Visit').focus();
+            isValid = false;
+            return false;
+        }
+
+        var Category = $('#Category').val();
+        if (Category   == "-1") {
+            alert('Please Select Category.');
+            $('#Category').focus();
+            isValid = false;
+            return false;
+        }
+
+
+        var Whom_To_Meet = $('#Whom_To_Meet').val();
+        if (Whom_To_Meet == "-1") {
+            alert('Please Select Whom_To_Meet.');
+            $('#Whom_To_Meet').focus();
+            isValid = false;
+            return false;
+        }  
+        var Email_Id = $.trim($("#Email_Id").val());
+        if (Email_Id == "") {
+        alert('Email should not be blank.');
+        $('#Email_Id').focus();
+        isValid = false;
+        return false;
+    }
+   
+        return isValid;
+    }
+</script>
+
+<script type="text/javascript">
+    function Authenticate() {
+        var token = sessionStorage.getItem("accessToken");
+        if (token == null) {
+            alert('Token has expired.');
+            return false
+        }
+        $.ajax({
+            type: "GET",
+            url: basePath + "api/data/authenticate",
+            dataType: 'json',
+            async: false,
+            beforeSend: function (xhr) {
+
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function (result) {
+                var total = result.length;
+                if (total != 0) {
+                    var UserAttributes = new Array();
+                    UserAttributes = result.split("_");
+                    $('#UserName').val(UserAttributes[0]);
+                    $('#User_ID').val(UserAttributes[1]);
+                    //$('#UserName').val(UserAttributes[0]);
+                    $('#basePath').val(UserAttributes[3]);
+                }
+                //alert('User has Authenticated');
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+           $("#name").on('input', function () {
+        var inputText = $("#name").val();
+
+        // Capitalize the first letter of each word
+        var capitalizedText = inputText.split(' ').map(function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join(' ');
+
+        // Update input field with capitalized text
+        $("#name").val(capitalizedText);
+    });
+
+        $("#mobile_no").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[0-9]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#address").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+        //$("#email_id").keypress(function (e) {
+        //    var keyCode = e.keyCode || e.which;
+        //    var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+        //    var isValid = regex.test(String.fromCharCode(keyCode));
+        //    if (!isValid) {
+        //        alert("Only Numbers allowed.");
+        //    }
+        //    return isValid;
+        //});
+
+
+        $("#complaint_details").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+
+    });
+</script>
+
+
+<script>
+    function Fill_Department() {
+        var Data =
+        {
+            Id: '',            
+        };
+        $.ajax({
+            url: rootUrl + "api/Visitor_Master/Fill_Department",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (data) {
+                
+                var s = '';
+                var s = '<option value="-1">---Select---</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].id + '">' + data[i].dept_Name + '</option>';
+                }
+                $("#Department").html(s);
+            }
+        }
+        );
+    };
+</script>
+<script>
+    function Fill_Employee() {
+        var Data =
+        {
+            Emp_Id: '',
+        };
+        $.ajax({
+            url: rootUrl + "api/Visitor_Master/Fill_Employee",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (data) {
+                
+                var s = '';
+                var s = '<option value="-1">---Select---</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].emp_Id + '">' + data[i].emp_Name + '</option>';
+                }
+                $("#Whom_To_Meet").html(s);
+            }
+        }
+        );
+    };
+</script>
+
+<script>
+    function Print() {
+        var printButton = document.getElementById("Edit");
+        //Set the print button visibility to 'hidden'
+        printButton.style.visibility = 'hidden';
+        var prtContent = document.getElementById("Print");
+        var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+        WinPrint.document.write(prtContent.innerHTML);       
+        WinPrint.focus();
+        WinPrint.print();
+    }
+</script>
+<script>
+    function Field_Visible() {
+        $('#Electronic_Accessories').click(function () {
+            Field_Disabled_Enabled();
+        });
+    };
+    
+    function Field_Disabled_Enabled() {
+        if ($('#Electronic_Accessories').val() == "Laptop")
+        {          
+            $('#Brand').css('visibility', 'visible');
+            $('#SN').css('visibility', 'visible');
+        }
+        else
+        {          
+                    
+            $('#Brand').css('visibility', 'hidden');
+            $('#SN').css('visibility', 'hidden');
+        }
+    }
+</script>
+
+

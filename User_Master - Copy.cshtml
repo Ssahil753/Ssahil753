@@ -1,0 +1,505 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Legal.cshtml";
+}
+<input type="hidden" id="user_id" value="0" />
+<input type="hidden" id="user_type" value="Legal" /> 
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    $(document).ready(function ()
+    {
+
+    });
+</script>
+<div class="col-md-12 pt-2">
+    <div class="row" style="border-bottom:#CCCCCC solid 1px;">
+        <div class="col-sm-9"><h3 style="border:none;">User Master</h3></div>
+        <div class="col-sm-3 text-right"><a href="#" class="btn btn-sm btn-info" data-toggle="modal" data-target="#Edit">+ Add New User</a></div>
+    </div>
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <table id="Grid" width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th>Employee Name</th>
+                        <th>User Name</th>
+                        <th>User Password</th>
+                        <th>Mobile No</th>
+                        <th>Email ID</th>
+                        <th>Role Name</th>
+                        <th>User Status</th>
+                        <th>Action</th>
+                        <th hidden="hidden">user_id</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<!-- The Modal -->
+<div class="modal" id="Edit">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add/Edit User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    User Name :  <span style="color:Red">*</span>
+                                    <input id="username" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    User Password :<span style="color:Red">*</span>
+                                    <input id="user_password" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Emp Name :<span style="color:Red">*</span>
+                                    <input id="employee_name" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Mobile No :<span style="color:Red">*</span>
+                                    <input id="mobile_no" class="form-control" type="text" maxlength="10" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Email ID :<span style="color:Red">*</span>
+                                    <input id="email_id" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Role Name :<span style="color:Red">*</span>
+                                    <select id="rolenamenew" class="form-control" name="rolename">
+                                        <option value="Admin">Admin</option>                                      
+                                        <option value="User">User</option>                                       
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    User Status :<span style="color:Red">*</span>
+                                    <select id="active_status1" name="active_status" class="form-control">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+ 
+                        </div>
+
+                    </div>
+                </div>
+
+                 <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Region :<span style="color:Red">*</span>
+                                    <select id="Region" class="form-control" onchange="Fill_Village()"   name=”color”>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Division :<span style="color:Red">*</span>
+                                    <select id="Division" class="form-control" name=”color”>
+                                    </select>
+                                </div>
+                            </div>
+                </div>
+                  <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    District :<span style="color:Red">*</span>
+                                    <select id="District" class="form-control" onchange="Fill_Village()"   name=”color”>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Taluka :<span style="color:Red">*</span>
+                                    <select id="Taluka" class="form-control" name=”color”>                                         
+                                    </select>
+                                </div>
+                            </div>
+                </div>
+                <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Village :<span style="color:Red">*</span>
+                                    <select id="Village" class="form-control" onchange="Fill_Village()"   name=”color”>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Block :<span style="color:Red">*</span>
+                                    <select id="Block" class="form-control" name=”color”>                                         
+                                    </select>
+                                </div>
+                            </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12  text-center">
+                        <div class="form-group">
+                            <input type="button" id="Save" class="btn btn-success" value="Submit" />
+                            <input type="button" id="Close" data-dismiss="modal" class="btn btn-warning" value="Close" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>case_no_new
+</div>
+<div class="clear"></div>
+<script>
+    $(document).ready(function ()    {
+        var rootUrl = '@Url.Content("~/")';
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+        $('#Save').val("Add");
+        Select_User();
+    });
+</script>
+<script>
+    $('#Save').click(function () {
+        
+        Select_User_Exist();
+    });
+</script>
+<script language="javascript" type="text/javascript">
+    function Select_User_Exist() {
+        var res = Validate();
+        if (res == false) {
+            return false;
+        }       
+        var username = $('#username').val();
+        var Data =
+        {
+            user_name: username,
+        };
+        $.ajax({
+            url: rootUrl + "api/User_Master/Select_User_Exist",
+            type: "Post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (result) {               
+                if (result == "0") {                
+                    if ($('#Save').val() == "Add") {                      
+                         Insert_User('Insert_User');
+                    };
+                }
+                else {
+                    if ($('#Save').val() == "Update") {
+                        Insert_User('Update_User');
+                    }
+                    else {
+                        alert("Record is already Exist.");
+                    }
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+<script>
+    $('#Close').click(function () {
+        Clear_Data();
+    });
+</script>
+<script language="javascript" type="text/javascript">
+    function Insert_User(Action_Name) {       
+        var res = Validate();
+        if (res == false) {
+            return false;
+        }      
+        if ($('#user_id').val() == "1") {
+            var user_id = "0";
+            if (Action_Name == 'Insert_User') {
+                var Action = 'Insert_User';
+            }
+        }
+        else {
+            var user_id = $('#user_id').val();
+            if (Action_Name == 'Update_User') {
+                var Action = 'Update_User';
+            }
+        }      
+        var Data =
+        {
+            user_id: user_id,
+            user_name: $('#username').val(),
+            user_password: $('#user_password').val(),
+            emp_name: $('#employee_name').val(),
+            mobile_no: $('#mobile_no').val(),
+            email_id: $('#email_id').val(),
+            role_name: $('#rolenamenew').val(),
+            user_type: $("#user_type").val(),
+            active_status: $("#active_status1").val(),           
+        };
+       
+        $.ajax({
+            url: rootUrl + "api/User_Master/" + Action_Name,
+            type: "Post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (result) {
+                if ($('#user_id').val() == "0") {
+                    alert("Record is Saved Successfully.");
+                }
+                else {
+                    alert("Record is Udated Successfully.");
+                }
+                Select_User();
+                Clear_Data();
+                $('#Edit').modal("hide");
+                $('.modal-backdrop').remove();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function Clear_Data() {
+        $('#username').val("");
+        $('#user_password').val("");
+        $('#employee_name').val("");
+        $('#mobile_no').val("");
+        $('#email_id').val("");
+        //$('#rolenamenew').val("");
+        $("#username").prop('disabled', false);
+        $('#Save').val("Add");
+        $('#user_id').val("0");
+    }
+</script>
+<script type="text/javascript">
+    function Validate() {
+        var isValid = true;
+        var user_name = $.trim($("#username").val()).length;
+        if (user_name == "0") {
+            alert('User Name should not be blank.');
+            $('#username').focus();
+            isValid = false;
+            return false;
+        }
+        var user_password = $.trim($("#user_password").val()).length;
+        if (user_password == "0") {
+            alert('User Password should not be blank.');
+            $('#user_password').focus();
+            isValid = false;
+            return false;
+        }
+        var emp_name = $.trim($("#employee_name").val()).length;
+        if (emp_name == "0") {
+            alert('Employee Name should not be blank.');
+            $('#employee_name').focus();
+            isValid = false;
+            return false;
+        }
+        var mobile_no = $.trim($("#mobile_no").val()).length;
+        if (mobile_no == "0") {
+            alert('Mobile No should not be blank.');
+            $('#mobile_no').focus();
+            isValid = false;
+            return false;
+        }
+        var email_id = $.trim($("#email_id").val()).length;
+        if (email_id == "0") {
+            alert('Email ID should not be blank.');
+            $('#email_id').focus();
+            isValid = false;
+            return false;
+        }
+        return isValid;
+    }
+</script>
+<script type="text/javascript">
+    function Authenticate() {
+        var token = sessionStorage.getItem("accessToken");
+        if (token == null) {
+            alert('Token has expired.');
+            return false
+        }
+        $.ajax({
+            type: "GET",
+            url: rootUrl + "api/data/authenticate",
+            dataType: 'json',
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function (result) {
+                var total = result.length;
+                if (total != 0) {
+                    var UserAttributes = new Array();
+                    UserAttributes = result.split("_");
+                    $('#UserName').val(UserAttributes[0]);
+                    $('#User_ID').val(UserAttributes[1]);
+                    $('#basePath').val(UserAttributes[3]);
+                }
+                //alert('User has Authenticated');
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function Select_User() {       
+       // Authenticate();
+        var token = sessionStorage.getItem("accessToken");
+        if (token == null) {
+            alert('Token has expired.');
+            return false
+        }
+        var Data =
+        {
+            user_id: "0",
+            user_type: $("#user_type").val(),
+        };
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/User_Master/Select_User",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: OnSuccess,
+            failure: function (response) {
+                // alert(response.d);
+            },
+            error: function (response) {
+                //alert(response);
+            }
+        });
+    };
+    function OnSuccess(response) {
+        $("#Grid").DataTable(
+            {
+                bLengthChange: true,
+                lengthMenu: [[10, 20, -1], [10, 20, "All"]],
+                bFilter: true,
+                bSort: true,
+                bPaginate: true,
+                destroy: true,
+                data: response,
+                columns: [
+                    { 'data': 'sr_no', class: "text-right" },
+                    { 'data': 'emp_name' },
+                    { 'data': 'user_name', class: "text-center" },
+                    { 'data': 'user_password' },
+                    { 'data': 'mobile_no', class: "text-right" },
+                    { 'data': 'email_id' },
+                    { 'data': 'role_name', class: "text-center" },
+                    { 'data': 'active_status', class: "text-center" },
+                    {
+                        'mRender': function (data, type, row) {
+                            return '<input type="button" class="btn btn-sm btn-info btnClass" value="Edit"/>';
+                        },
+                    },
+                    { 'data': 'user_id', class: "text-hide" },
+                    //{ 'data': 'user_id'},
+                ]
+            });
+    };
+</script>
+<script>
+    $('#Grid').on('click', '.btnClass', function () 
+    {
+        debugger;
+        $("#Edit").modal("show");
+    
+        $('#Save').val("Update");
+        var emp_name = $(this).closest('tr').children('td:eq(1)').text();
+        var user_name = $(this).closest('tr').children('td:eq(2)').text();
+        var user_password = $(this).closest('tr').children('td:eq(3)').text();
+        var mobile_no = $(this).closest('tr').children('td:eq(4)').text();
+        var email_id = $(this).closest('tr').children('td:eq(5)').text();
+        var role_name = $(this).closest('tr').children('td:eq(6)').text();
+        var user_id = $(this).closest('tr').children('td:eq(9)').text();
+        var active_status = $(this).closest('tr').children('td:eq(7)').text();       
+
+            
+        $("#user_password").val(user_password);
+        $("#employee_name").val(emp_name);
+        $("#mobile_no").val(mobile_no);
+        $("#email_id").val(email_id);
+        $("#user_id").val(user_id);
+        $("#username").val(user_name);
+        $("#username").prop('disabled', true);
+        $("#rolenamenew").val(role_name);
+        $("#active_status1").val(active_status);
+
+        
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#username").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#mobile_no").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[0-9]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#employee_name").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#email_id").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&*@@.]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+    });
+</script>

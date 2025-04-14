@@ -1,0 +1,128 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+		<PackageReference Include="QRCoder" Version="1.4.1" />
+		<!--<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />-->
+		
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\Content\css\bootstrap.min.css-back.map" />
+		<None Include="wwwroot\Content\css\bootstrap.min.css.map" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-brands-400.svg" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-brands-400.woff2" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-regular-400.svg" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-regular-400.woff2" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-solid-900.svg" />
+		<None Include="wwwroot\Content\css\fontawesome-free\webfonts\fa-solid-900.woff2" />
+		<None Include="wwwroot\Content\images_ol.rar" />
+		<None Include="wwwroot\Content\js\app.min.js" />
+		<None Include="wwwroot\Content\js\bootstrap.min.js" />
+		<None Include="wwwroot\Content\js\bootstrap.min.js.map" />
+		<None Include="wwwroot\Content\js\Chart.min.js" />
+		<None Include="wwwroot\Content\js\chartjs-plugin-datalabels.js" />
+		<None Include="wwwroot\Content\js\datatables\js\dataTables.bootstrap4.min.js" />
+		<None Include="wwwroot\Content\js\datatables\js\jquery.dataTables.min.js" />
+		<None Include="wwwroot\Content\js\flot\excanvas.js" />
+		<None Include="wwwroot\Content\js\flot\excanvas.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.colorhelpers.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.colorhelpers.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.canvas.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.canvas.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.categories.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.categories.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.crosshair.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.crosshair.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.errorbars.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.errorbars.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.fillbetween.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.fillbetween.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.image.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.image.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.navigate.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.navigate.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.pie.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.pie.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.resize.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.resize.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.selection.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.selection.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.stack.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.stack.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.symbol.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.symbol.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.threshold.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.threshold.min.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.time.js" />
+		<None Include="wwwroot\Content\js\flot\jquery.flot.time.min.js" />
+		<None Include="wwwroot\Content\js\Global_Function.js" />
+		<None Include="wwwroot\Content\js\jquery.mCustomScrollbar.concat.min.js" />
+		<None Include="wwwroot\Content\js\jquery.min.js" />
+		<None Include="wwwroot\Content\js\popper.min.js" />
+		<None Include="wwwroot\Content\style1.zip" />
+		<None Include="wwwroot\js\site.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+		<None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+		<None Include="wwwroot\lib\bootstrap\LICENSE" />
+		<None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+		<None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+		<None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+		<None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+		<None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+		<None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+		<None Include="wwwroot\lib\jquery-validation\LICENSE.md" />
+		<None Include="wwwroot\lib\jquery\dist\jquery.js" />
+		<None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+		<None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\Content\Photo\" />
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="rd /s /q &quot;$(ProjectDir)bin" />
+	</Target>
+
+</Project>

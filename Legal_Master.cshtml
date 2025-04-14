@@ -1,0 +1,796 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Legal.cshtml";
+}
+<input type="hidden" id="legal_id" />
+<input type="hidden" id="user_id" />
+<input type="hidden" id="user_name" />
+<input type="hidden" id="rooturl" />
+<input type="hidden" id="role_name" />
+<input type="hidden" id="rcount" />
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    $(document).ready(function ()
+    {
+
+    });
+</script> 
+    <div class="col-md-12 pt-2">
+        <div class="row" style="border-bottom:#CCCCCC solid 1px;">
+            <div class="col-sm-9"><h3 style="border:none;">Legal Case</h3></div>
+            <div class="col-sm-3 text-right"><a href="#" class="btn btn-sm btn-info" data-toggle="modal" data-target="#Edit">+ Add New Legal Case </a></div>
+        </div>
+        <div class="row pt-2">
+            <div class="col-md-12">
+                <div class="table-responsive" style="margin-top: 10px;">
+                    <table id="Grid" class="table table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th>Legal Case ID</th>
+                                <th>Filing Date</th>
+                                <th>Case No.</th>
+                                <th>Petitioner Name</th>
+                                <th>Court</th>
+                                <th>Case Type</th>
+                                <th>File No</th>
+                                <th>Documents</th>
+                                <th>Upload Doc</th>
+                                <th>Legal Case Approval Status</th>
+                                <th>Legal Case Approval Remarks</th>                              
+                                <th>Action</th>
+                                <th hidden="hidden">legal_id</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div> 
+<div class="clearfix"></div>
+<!-- The Modal -->
+<div class="modal" id="Edit">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add/Edit Legal Case</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    Petitioner Name :<span style="color:Red">*</span>
+                                    <input id="name_of_petitioner" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    File No :<span style="color:Red">*</span>
+                                    <input id="legal_file_no" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Court :<span style="color:Red">*</span>
+                                    <select id="court" class="form-control" name=”color”>
+                                        <option value="Bombay High Court">Bombay High Court</option>
+                                        <option value="Supreme Court">Supreme Court</option>
+                                        <option value="District Court">District Court</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Case No.:<span style="color:Red">*</span>
+                                    <input id="case_no" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Case Type :<span style="color:Red">*</span>
+                                    <select id="case_type" class="form-control" name=”color”>
+                                        <option value="Litigation-Case Filed against MSRDC">Litigation-Case Filed against MSRDC</option>
+                                        <option value="Litigation-Case Filed by MSRDC">Litigation-Case Filed by MSRDC</option>
+                                        <option value="Non Litigation-Case">Non Litigation-Case</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group date" id="fromdate">
+                                    Filing Date :<span style="color:Red">*</span>
+                                    <input type="text" class="form-control pull-right" placeholder="dd-mm-yyyy" id="date_of_filing">
+                                    <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group date" id="todate">
+                                    Order Date :<span style="color:Red">*</span>
+                                    <input type="text" class="form-control pull-right" placeholder="dd-mm-yyyy" id="date_of_order">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Petitioner Counsel :
+                                    <input id="name_of_petitioner_counsel" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Respondent Counsel :
+                                    <input id="name_of_respondent_counsel" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Respondent :
+                                    <input id="name_of_respondent" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    District :<span style="color:Red">*</span>
+                                    <select id="district_name" class="form-control"  onchange="Fill_Taluka()" name=”color”>                                        
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Taluka :<span style="color:Red">*</span>
+                                    <select id="taluka_name" class="form-control" onchange="Fill_Village()"   name=”color”>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    Village :<span style="color:Red">*</span>
+                                    <select id="village_name" class="form-control" name=”color”>
+                                         
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12  text-center">
+                        <div class="form-group">
+                            <input type="button" id="Save" class="btn btn-success" value="Submit" />
+                            <input type="button" id="Close" data-dismiss="modal" class="btn btn-warning" value="Close" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>case_no_new
+</div>
+<div class="modal" id="UploadDocument">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Upload Legal Case document</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12  text-center">
+                        <div class="form-group">                       
+                            <form method="post" asp-action="Upload_Legal_File" asp-controller="Upload_Download_Files" enctype="multipart/form-data">
+                                <input type="file" id="files" name="files" multiple />
+                                <input id="case_no_new" hidden="hidden" class="form-control" name="case_no_new" type="text" />
+                                <br />
+                                <br />
+                                <input id="Upload" type="submit" class="btn btn-success" value="Upload" />
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div> 
+<script>
+    $(document).ready(function ()    {
+        var rootUrl = '@Url.Content("~/")';
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+        $('#Save').val("Add");
+        $("#case_no").prop('disabled', false);
+        $('#legal_id').val("0");
+        Select_Legal();
+        Fill_District();
+
+        $('#fromdate').datepicker({
+            format: 'dd-mm-yyyy',
+            todayHighlight: 'TRUE',
+            //startdate:"0",
+            endDate: "0-",
+            autoclose: true,
+        });
+        $('#todate').datepicker({
+            format: 'dd-mm-yyyy',
+            todayHighlight: 'TRUE',
+            //startdate:"0",
+            endDate: "0-",
+            autoclose: true,
+        });       
+    });
+</script>
+<script>
+    $('#Save').click(function () {
+        Select_Legal_Exist();        
+       // alert($('#rcount').val());
+       
+    });
+</script>
+<script language="javascript" type="text/javascript">
+    function Select_Legal_Exist()
+    {
+        var res = Validate();
+        if (res == false) {
+            return false;
+        } 
+
+       
+        var case_no = $('#case_no').val();           
+        var Data =
+        {
+            case_no: case_no,            
+        };
+        $.ajax({
+            url: rootUrl + "api/Legal_Master/Select_Legal_Exist",
+            type: "Post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (result)
+            {                
+                if (result == "0")
+                {                  
+                    if ($('#Save').val() == "Add")
+                    {
+                        Insert_Legal('Insert_Legal');
+                       // alert('Add');
+                    };
+                }
+                else
+                {
+                    if ($('#Save').val() == "Update") {
+                        Insert_Legal('Update_Legal');
+                       // alert('Edit');
+                    }
+                    else
+                    {
+                        alert("Record is already Exist.");
+                    }                  
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+<script>
+    $('#Upload').click(function () {
+        var res = Validate_Files();
+        if (res == false) {
+            return false;
+        }
+    });
+</script>
+<script>
+    $('#Close').click(function () {
+        Clear_Data();
+    });
+</script>
+<script language="javascript" type="text/javascript">
+    function Insert_Legal(Action_Name) {
+        //alert(Action_Name);
+     
+        var res = Validate();
+        if (res == false) {
+            return false;
+        }
+        if ($('#legal_id').val() == "0") {
+            var legal_id = "0";
+            if (Action_Name == 'Insert_Legal')
+            {
+                var Action = 'Insert_Legal';
+            }
+            
+        }
+        else {
+            var legal_id = $('#legal_id').val();
+           /// --var Action = 'Update_Legal';
+
+
+            if (Action_Name == 'Update_Legal')
+            {
+                var Action = 'Update_Legal';
+            }
+
+        }
+        var Data =
+        {
+            legal_id: legal_id,
+            user_id: "1",
+            legal_file_no: $('#legal_file_no').val(),
+            name_of_petitioner: $('#name_of_petitioner').val(),
+            legal_updated_by: "1",
+            case_type: $('#case_type').val(),
+            date_of_filing: $('#date_of_filing').val(),
+            name_of_petitioner_counsel: $('#name_of_petitioner_counsel').val(),
+            name_of_respondent: $('#name_of_respondent').val(),
+            name_of_respondent_counsel: $('#name_of_respondent_counsel').val(),
+            date_of_order: $('#date_of_order').val(),
+            legal_created_by: $('#user_id').val(),
+            legal_update_by: $('#user_id').val(),
+            legal_created_on: $('#date_of_order').val(),
+            court: $('#court').val(),
+            case_no: $('#case_no').val(),
+            advocate_id: $('#advocate_id').val(),
+            fees_id: $('#fees_id').val(),
+            district: $('#district_name').val(),
+
+            taluka: $('#taluka_name').val(),
+            village: $('#village_name').val(),
+
+            
+
+        };
+        $.ajax({
+            url: rootUrl + "api/Legal_Master/" + Action,
+            type: "Post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (result) {
+                if ($('#legal_id').val() == "0") {
+                    alert("Record is Saved Successfully.");
+                }
+                else {
+                    alert("Record is Udated Successfully.");
+                }
+                Select_Legal();
+                Clear_Data();
+                $("#Edit").modal("hide");
+                $('.modal-backdrop').remove();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function Clear_Data() {       
+        $('#name_of_petitioner').val("");
+        $('#legal_file_no').val("");
+        $('#case_no').val("");
+        $('#name_of_petitioner_counsel').val("");
+        $('#name_of_respondent_counsel').val("");
+        $('#name_of_respondent').val("");
+        //document.getElementById("main").reset();
+        //location.reload(false);
+        $('#Save').val("Add");
+    }
+</script>
+<script type="text/javascript">
+    function Validate() {
+        var isValid = true;
+        var date_of_filing = $.trim($("#date_of_filing").val()).length;
+        if (date_of_filing == "0") {
+            alert('Date of filing should not be blank.');
+            $('#date_of_filing').focus();
+            isValid = false;
+            return false;
+        }
+        var date_of_order = $.trim($("#date_of_order").val()).length;
+        if (date_of_order == "0") {
+            alert('Date of Order should not be blank.');
+            $('#date_of_order').focus();
+            isValid = false;
+            return false;
+        }
+        var name_of_petitioner = $.trim($("#name_of_petitioner").val()).length;
+        if (name_of_petitioner == "0") {
+            alert('Name of Petitioner should not be blank.');
+            $('#name_of_petitioner').focus();
+            isValid = false;
+            return false;
+        }
+        var legal_file_no = $.trim($("#legal_file_no").val()).length;
+        if (legal_file_no == "0") {
+            alert('Legal file No should not be blank.');
+            $('#legal_file_no').focus();
+            isValid = false;
+            return false;
+        }
+        var case_no = $.trim($("#case_no").val()).length;
+        if (case_no == "0") {
+            alert('Case No should not be blank.');
+            $('#case_no').focus();
+            isValid = false;
+            return false;
+        }
+
+        var district = $('#district').val();
+        if (district == "-1") {
+            alert('Please Select District.');
+            $('#district').focus();
+            isValid = false;
+            return false;
+        }
+        var taluka = $('#taluka').val();
+        if (taluka == "-1") {
+            alert('Please Select Taluka.');
+            $('#taluka').focus();
+            isValid = false;
+            return false;
+        }
+
+        var village = $('#village').val();
+        if (village == "-1") {
+            alert('Please Select Village.');
+            $('#village').focus();
+            isValid = false;
+            return false;
+        }
+
+        return isValid;
+    }
+</script>
+
+<script type="text/javascript">
+    function Validate_Files() {
+        var isValid = true;
+        var files = $.trim($("#files").val()).length;
+        if (files == "0") {
+            alert('Files should not be blank.');
+            $('#files').focus();
+            isValid = false;
+            return false;
+        }
+        return isValid;
+    }
+</script>
+<script type="text/javascript">
+    function Select_Legal() {
+        var token = sessionStorage.getItem("accessToken");
+        var expires_in = sessionStorage.getItem("expires_in");
+        var UserName = sessionStorage.getItem("UserName");
+        if (token == null) {
+            alert('Your Token is expired.');
+            Token_Expired();
+            return false
+        }
+        Authenticate(token);
+        var Data =
+        {
+            legal_id: "0",
+        };
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/Legal_Master/Select_Legal",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: OnSuccess,
+            failure: function (response) {
+                // alert(response.d);
+            },
+            error: function (response) {
+                //alert(response);
+            }
+        });
+    };
+    function OnSuccess(response) {
+        $("#Grid").DataTable(
+            {
+                bLengthChange: true,
+                lengthMenu: [[10, 20, -1], [10, 20, "All"]],
+                bFilter: true,
+                bSort: true,
+                bPaginate: true,
+                destroy: true,
+                data: response,
+                columns: [
+                    { 'data': 'sr_no', class: "text-right" },
+                    { 'data': 'legal_id', class: "text-right" },
+                    { 'data': 'date_of_filing' },
+                    { 'data': 'case_no', class: "text-right" },
+                    { 'data': 'name_of_petitioner' },
+                    { 'data': 'court' },
+                    { 'data': 'case_type' },
+                    { 'data': 'legal_file_no', class: "text-right" },
+                    { 'data': 'legal_documents' },
+                    {
+                        'mRender': function (data, type, row) {
+                            return '<input type="button" class="btn btn-sm btn-info btnUploadDocument" value="Upload"/>';
+                        },
+                    },
+                    { 'data': 'legal_approval_status' },
+                    { 'data': 'legal_approval_remark' },
+
+
+
+
+                    {
+                        'mRender': function (data, type, row) {
+                            return '<input type="button" class="btn btn-sm btn-info btnClass" value="Edit"/>';
+                        },
+                    },
+
+                ]
+            });
+    };
+</script>
+<script>
+    $('#Grid').on('click', '.btnClass', function () {
+        $("#Edit").modal("show");
+        $('#Save').val("Update");
+        $("#case_no").prop('disabled', true);
+        var legal_id = $(this).closest('tr').children('td:eq(1)').text();        
+        //var date_of_filing = $(this).closest('tr').children('td:eq(2)').text();
+        var case_no = $(this).closest('tr').children('td:eq(3)').text();
+        var name_of_petitioner = $(this).closest('tr').children('td:eq(4)').text();
+        var court = $(this).closest('tr').children('td:eq(5)').text();
+        var case_type = $(this).closest('tr').children('td:eq(6)').text();
+        var legal_file_no = $(this).closest('tr').children('td:eq(7)').text();
+
+        //$("#date_of_filing").val(date_of_filing);
+        //$("#date_of_filing").val(date_of_filing);      
+
+        $("#name_of_petitioner").val(name_of_petitioner);
+        $("#case_no").val(case_no);
+        $("#court").val(court);
+        $("#case_type").val(case_type);
+        $("#legal_file_no").val(legal_file_no);
+        $("#legal_id").val(legal_id);
+
+        var Data =
+        {
+            legal_id: legal_id,
+        };
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/Legal_Master/Select_Legal",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var total = result.length;
+                if (total != 0) {
+                    $.each(result, function (key, item) {
+                        $('#name_of_petitioner_counsel').val(item.name_of_petitioner_counsel);
+                        $('#name_of_respondent').val(item.name_of_respondent);
+                        $('#name_of_respondent_counsel').val(item.name_of_respondent_counsel);
+                        var date_of_order = item.date_of_order;
+                        $('#date_of_order').val(date_of_order);
+                        var date_of_filing = item.date_of_filing;
+                        $('#date_of_filing').val(date_of_filing);
+                    });
+                }
+            },
+            failure: function (response) {
+                // alert(response.d);
+            },
+            error: function (response) {
+                //alert(response);
+            }
+        });
+    });
+    $('#Grid').on('click', '.btnUploadDocument', function () {
+        var case_no = $(this).closest('tr').children('td:eq(3)').text();
+        $('#case_no_new').val(case_no);
+        $("#UploadDocument").modal("show");
+        $('#Save').val("Edit");
+    });
+</script>
+
+<script type="text/javascript">
+    function Authenticate(token) {
+        var Data =
+        {
+            token: token,
+        };
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/User_Login/Select_User_Attributes",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var total = result.length;
+                if (total != 0) {
+                    $.each(result, function (key, item) {
+                        $('#user_id').val(item.USER_ID);
+                        $('#user_name').val(item.USERNAME);
+                        $('#rooturl').val(item.ROOTURL);
+                        $('#role_name').val(item.role_name);
+                    });
+                }
+            },
+            failure: function (response) {
+                // alert(response.d);
+            },
+            error: function (response) {
+                //alert(response);
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+        $("#name_of_petitioner").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#case_no").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#legal_file_no").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#name_of_petitioner_counsel").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#name_of_respondent").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+        $("#name_of_respondent_counsel").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+    });
+</script> 
+
+<script>
+    function Fill_District() {
+        var Data =
+        {
+            OPD_NO: '',
+            Query_Parameter: 'Department'
+        };
+        $.ajax({
+            url: rootUrl + "api/Legal_master/Fill_district",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (data) {
+                var s = '<option value="-1">---Select---</option>';
+                //var s = '';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].district_name + '">' + data[i].district_name + '</option>';
+                }
+                $("#district_name").html(s);                
+            }
+        }
+        );
+    };
+</script>
+
+<script>
+    function Fill_Taluka() {
+        var Data =
+        {
+            OPD_NO: '',
+            district_name: $("#district_name").val()
+        };
+
+        
+        $.ajax({
+            url: rootUrl + "api/Legal_master/Fill_taluka",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (data) {
+                
+                var s = '';
+                var s = '<option value="-1">---Select---</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].taluka_name + '">' + data[i].taluka_name + '</option>';
+                }
+                $("#taluka_name").html(s);
+                //Fill_Village();
+            }
+        }
+        );
+    };
+</script>
+
+<script>
+    function Fill_Village() {
+        var Data =
+        {
+            OPD_NO: '',
+            taluka_name: $("#taluka_name").val()
+        };
+
+        
+
+        $.ajax({
+            url: rootUrl + "api/Legal_master/Fill_Village",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(Data),
+            success: function (data) {
+                
+                var s = '';
+                var s = '<option value="-1">---Select---</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].village_name + '">' + data[i].village_name + '</option>';
+                }
+                $("#village_name").html(s);
+            }
+        }
+        );
+    };
+</script>

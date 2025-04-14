@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visitor Management Donut Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .chart-container {
+            width: 400px;
+            height: 400px;
+            display: inline-block;
+            vertical-align: top;
+            margin: 20px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Visitor Management Dashboard</h2>
+
+    <div class="chart-container">
+        <canvas id="purposeChart"></canvas>
+    </div>
+
+    @* <div class="chart-container"> *@
+    @*     <canvas id="statusChart"></canvas> *@
+    @* </div> *@
+
+    <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+    <script>
+        function createDonutChart(canvasId, title, labels, dataValues, colors) {
+          const ctx = $('#' + canvasId).get(0).getContext('2d');
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: dataValues,
+                backgroundColor: colors
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '60%',
+              plugins: {
+                legend: { position: 'right' },
+                title: {
+                  display: true,
+                  text: title,
+                  font: {
+                    size: 18
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        $(document).ready(function () {
+          // 1️⃣ Purpose of Visit
+          createDonutChart(
+            'purposeChart',
+            'Visitor Purpose',
+            ['Official', 'Delivery', 'Interview', 'Maintenance', 'Personal'],
+            [45, 20, 15, 10, 10],
+            ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6f42c1']
+          );
+
+          // 2️⃣ Visitor Status
+          // createDonutChart(
+          //   'statusChart',
+          //   'Visitor Status',
+          //   ['Checked In', 'Checked Out', 'Pending Approval', 'Denied'],
+          //   [40, 30, 20, 10],
+          //   ['#17a2b8', '#6c757d', '#fd7e14', '#dc3545']
+          // );
+
+          // 3️⃣ Visitor Category
+          createDonutChart(
+            'categoryChart',
+            'Visitor Category',
+            ['Vendor', 'Guest', 'Contractor', 'Interviewee', 'Delivery', 'VIP'],
+            [30, 25, 20, 10, 10, 5],
+            ['#007bff', '#ffc107', '#28a745', '#6610f2', '#fd7e14', '#dc3545']
+          );
+        });
+    </script>
+
+</body>
+</html>

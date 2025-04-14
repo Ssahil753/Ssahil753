@@ -1,0 +1,372 @@
+﻿    @{
+        Layout = "~/Views/Shared/_Layout_Visitor.cshtml";
+    }
+    <input type="hidden" id="open" />
+    <input type="hidden" id="closed" />
+    <input type="hidden" id="active" />
+    <input type="hidden" id="inactive" />
+    <script>
+        var rootUrl = '@Url.Content("~/")';
+        $(document).ready(function () {
+            // You can call your function here to fetch data and render chart.
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<div class="row" style="justify-content:center">
+        <div class="row" >
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <i class="fas fa-chart-pie"></i> Purpose of Visit
+                    </div>
+                    <div class="card-body">
+                        <canvas id="purposeDonutChart" style="min-height: 250px; height: 250px; max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <i class="fas fa-chart-pie"></i> Category
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryDonutChart" style="min-height: 250px; height: 250px; max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+      
+    <div class="col-md-12" style="margin: 15px;">
+        <div class="card">
+            <div class="card-header text-center">
+                <i class="fas fa-chart-pie"></i> User List Chart (User Count)
+                <div style="float:right">
+                    <input type="radio" id="dayFilter" name="filterType" value="day" checked>
+                    <label for="dayFilter">Daily</label>
+                    <input type="radio" id="monthFilter" name="filterType" value="month">
+                    <label for="monthFilter">Monthly</label>
+                    <input type="radio" id="yearFilter" name="filterType" value="year">
+                    <label for="yearFilter">Yearly</label>
+                    <button id="exportPdfBtn" class="btn btn-danger" >
+                        Export PDF
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="userListChart" style="height: 500px !important;"></canvas>
+            </div>
+        </div>
+    </div>
+     </div>
+<script>
+    $(document).ready(function () {
+        var token = sessionStorage.getItem("accessToken");
+        if (!token) {
+            alert('Token has expired.');
+            return;
+        }
+
+        // Initial load with today's date and daily filter
+        const today = new Date().toISOString().split('T')[0];
+        Select_Visitor('day', today);
+        fetchVisitorData();
+
+        // Filter change handling
+        $('input[name="filterType"], #dateFilter').on('change', function () {
+            const filterType = $('input[name="filterType"]:checked').val();
+            const selectedDate = $('#dateFilter').val() || today;
+            Select_Visitor(filterType, selectedDate);
+        });
+
+        // Disable cut/copy/paste on text inputs
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+    });
+
+           function Select_Visitor(filterType, date) {
+        var token = sessionStorage.getItem("accessToken");
+        if (!token) {
+            alert('Token has expired.');
+            return;
+        }
+
+        var Data = {
+            FilterType: filterType,
+            Visitor_In_Time: date || ""
+        };
+
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/Visitor_Master/Select_Visitor_Stats",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function (response) {
+                prepareVisitorDataForBarChart(response, filterType);
+            },
+            error: function (xhr) {
+                console.error("AJAX Error:", xhr);
+            }
+        });
+    }
+
+
+
+           function prepareVisitorDataForBarChart(data, filterType) {
+        if (!Array.isArray(data)) {
+            console.error("Invalid data format for chart");
+            return;
+        }
+
+        // Reverse the array first
+        const reversedData = [...data].reverse();
+
+        const labels = reversedData.map(item => item.period);
+        const values = reversedData.map(item => item.count);
+        const title = `Visitor Count Per ${filterType.charAt(0).toUpperCase() + filterType.slice(1)}`;
+
+        createBarChart('userListChart', title, labels, values);
+    }
+
+
+
+    function createBarChart(canvasId, title, labels, dataValues) {
+        const ctx = $('#' + canvasId).get(0).getContext('2d');
+
+        // Clear old chart instance if needed
+        if (window.barChartInstance) {
+            window.barChartInstance.destroy();
+        }
+
+        const backgroundColors = labels.map(() => getRandomColor());
+
+        window.barChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: title,
+                    data: dataValues,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors,
+                    borderWidth: 1,
+                    barPercentage: 0.4,
+                    categoryPercentage: 0.5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Period' },
+                        ticks: { autoSkip: true, maxRotation: 45, minRotation: 45 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Visitor Count' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function fetchVisitorData() {
+        var token = sessionStorage.getItem("accessToken");
+        var Data = { Id: "0" };
+
+        $.ajax({
+            type: "POST",
+            url: rootUrl + "api/Visitor_Master/Select_Visitor",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function (response) {
+                preparePurposeVisitData(response);
+                prepareCategoryData(response);
+            },
+            error: function (errormessage) {
+                alert("Error: " + JSON.stringify(errormessage.responseJSON));
+            }
+        });
+    }
+
+   
+
+    function getRandomColor() {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `rgba(${r}, ${g}, ${b}, 0.7)`;
+    }
+</script>
+<script>
+    document.getElementById('exportPdfBtn').addEventListener('click', function () {
+        const chartContainer = document.getElementById('userListChart'); // Or wrap in a div if you want more than just the canvas
+
+        html2canvas(chartContainer).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('landscape', 'mm', 'a4');
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            // Scale chart image to fit page
+            pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight - 20);
+            pdf.save('visitor_chart.pdf');
+        });
+    });
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var rootUrl = '@Url.Content("~/")'; // Make sure rootUrl is correctly defined
+            var token = sessionStorage.getItem("accessToken");
+
+            if (token == null) {
+                alert('Token has expired.');
+                return false;
+            }
+
+            // Fetch and render charts when document is ready
+            fetchVisitorData();
+
+            // Disable cut, copy, and paste on text inputs
+            $('input:text').bind('cut copy paste', function (e) {
+                e.preventDefault();
+                alert("Cut / Copy / Paste Disabled");
+            });
+        });
+
+        function fetchVisitorData() {
+        console.log(fetchVisitorData);
+        debugger;
+            var token = sessionStorage.getItem("accessToken");
+
+            var Data = {
+                Id: "0",
+            };
+
+            $.ajax({
+                type: "POST",
+                url: rootUrl + "api/Visitor_Master/Select_Visitor",
+                data: JSON.stringify(Data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                },
+                success: function (response) {
+                    console.log("API Response:", response); // Check API response data
+                    preparePurposeVisitData(response);
+                    prepareCategoryData(response);
+                },
+                error: function (errormessage) {
+                    alert("Error: " + JSON.stringify(errormessage.responseJSON));
+                }
+            });
+        }
+
+        // Prepare data for Purpose of Visit chart
+        function preparePurposeVisitData(response) {
+        console.log(preparePurposeVisitData);
+        debugger;
+            var purposeData = {};
+            response.forEach(function(visitor) {
+                var purpose = visitor.purpose_Of_Visit;
+                if (purposeData[purpose]) {
+                    purposeData[purpose]++;
+                } else {
+                    purposeData[purpose] = 1;
+                }
+            });
+
+            var purposeLabels = Object.keys(purposeData);
+            var purposeValues = Object.values(purposeData);
+
+            // Log data to verify
+            console.log("Purpose of Visit Data:", purposeLabels, purposeValues);
+
+            // Create the Purpose of Visit donut chart
+            var purposeChartCanvas = $('#purposeDonutChart').get(0).getContext('2d');
+            var purposeDonutData = {
+                labels: purposeLabels,
+                datasets: [{
+                    data: purposeValues,
+                    backgroundColor: ['#f39c12', '#00a65a', '#00c0ef', '#f56954', '#3c8dbc','#ff2147'], // Colors for each slice
+                }]
+            };
+            var purposeDonutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            };
+            var purposeDonutChart = new Chart(purposeChartCanvas, {
+                type: 'doughnut',
+                data: purposeDonutData,
+                options: purposeDonutOptions
+            });
+        }
+
+        // Prepare data for Category chart
+        function prepareCategoryData(response) {
+        console.log(prepareCategoryData);
+        debugger;
+            var categoryData = {};
+            response.forEach(function(visitor) {
+                var category = visitor.category;
+                if (categoryData[category]) {
+                    categoryData[category]++;
+                } else {
+                    categoryData[category] = 1;
+                }
+            });
+
+            var categoryLabels = Object.keys(categoryData);
+            var categoryValues = Object.values(categoryData);
+
+            // Log data to verify
+            console.log("Category Data:", categoryLabels, categoryValues);
+
+            // Create the Category donut chart
+            var categoryChartCanvas = $('#categoryDonutChart').get(0).getContext('2d');
+            var categoryDonutData = {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                backgroundColor: ['#00a65a', '#f39c12','#00c0ef' ,'#f56954', '#3c8dbc','#ff2147'], // Colors for each slice
+                }]
+            };
+            var categoryDonutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            };
+            var categoryDonutChart = new Chart(categoryChartCanvas, {
+                type: 'doughnut',
+                data: categoryDonutData,
+                options: categoryDonutOptions
+            });
+        }
+    </script>

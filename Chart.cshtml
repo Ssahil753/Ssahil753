@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visitor Management Donut Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <canvas id="donutChart" width="400" height="400"></canvas>
+
+    <script>
+        function createDonutChart(canvasId, labels, dataValues, colors) {
+          var ctx = $('#' + canvasId).get(0).getContext('2d');
+
+          var data = {
+            labels: labels,
+            datasets: [{
+              data: dataValues,
+              backgroundColor: colors
+            }]
+          };
+
+          var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: {
+                position: 'right'
+              }
+            }
+          };
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: options
+          });
+        }
+
+        $(document).ready(function () {
+          createDonutChart(
+            'donutChart',
+            ['Official', 'Delivery', 'Interview', 'Maintenance', 'Personal'],
+            [45, 20, 15, 10, 10],
+            ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6f42c1']
+          );
+        });
+    </script>
+</body>
+</html>

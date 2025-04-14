@@ -1,0 +1,254 @@
+﻿@{ Layout = null; }
+<head>
+    <script src="@Url.Content("~/Content/js/Global_Function.js")"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<script>
+ //var rootUrl = '@Url.Content("http://10.9.236.41/Legal/")';
+    var rootUrl = 'http://localhost:5051/';
+ //var rootUrl = '@Url.Content("~/")';
+
+</script>
+@*<input type="hidden" id="rooturl" value="@Url.Content("~/")" />*@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Visitor Management System</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="@Url.Content("~/Content/images/favicon.png")" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/css/login.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/css/fontawesome-free/css/all.min.css")" type="text/css" rel="stylesheet" />
+    <script src="@Url.Content("~/Content/js/Global_Function.js")"></script>
+</head>
+<body class="login-back">
+    <div class="login-box">
+        <div class="login-logo"><img src="@Url.Content("~/Content/images/logo-legal.png")" alt=" " /></div>
+        <div class="login-tab">User Login</div>
+        <div class="login-box-body">
+            <p class="login-box-msg"></p>
+            <form name="myform" method="post" onsubmit="return ActionDeterminator();">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" id="UserName" placeholder="Username" required=required />
+                    <div class="input-group-append"><span class="fa fa-user input-group-text form-control-feedback"></span></div>
+                </div>
+                <div class="form-group input-group">
+                    <input type="password" class="form-control" placeholder="Password" id="UserPassword"  required=required />
+                    <div class="input-group-append"><span class="fa fa-lock input-group-text form-control-feedback"></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12  text-center">
+                        <div class="col-md-12  text-center" style="padding:10px;">
+                            <button id="btnLogin" type="button" class="btn btn-primary login-btn">Login</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <script src="@Url.Content("~/Content/js/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap.min.js")"></script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+       // var rootUrl = '@Url.Content("~/")';
+       // alert(rootUrl);
+
+
+        $('.UserPassword').bind('copy paste cut', function (e) {
+            e.preventDefault();
+            alert('cut,copy & paste options are disabled !!');
+        });
+
+       $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+       });
+
+        encodePassword();
+
+
+
+</script>
+
+<script>
+
+    function encodePassword() {
+        var passwordElement = document.getElementById('UserPassword');
+       // UserPassword.value = ascii85.encode(passwordElement.value);
+        $('#UserPassword').val(ascii85.encode(passwordElement.value));
+    }
+</script>
+<script type="text/javascript">
+    function Validate() {
+        var isValid = true;
+        var UserName = $.trim($("#UserName").val()).length;
+        if (UserName == 0) {
+            alert('User Name should not be blank.');
+            $('#UserName').focus();
+            isValid = false;
+            return false;
+        }
+        var UserPassword = $.trim($("#UserPassword").val()).length;
+        if (UserPassword == 0) {
+            alert('User Password should not be blank.');
+            $('#UserPassword').focus();
+            isValid = false;
+            return false;
+        }
+        return isValid;
+    }
+</script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+
+        $("#UserName").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_@@!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+    });
+    $(function () {
+        $("#UserPassword").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            var regex = /^[A-Za-z0-9-_@@!#$%^&* ]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                alert("Only Alphabets and Numbers allowed.");
+            }
+            return isValid;
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:text').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert("Cut / Copy / Paste Disabled");
+        });
+
+        $('#linkClose').click(function () {
+            $('#divError').hide('fade');
+        });
+        $('#btnLogin').click(function () {
+            var res = Validate();
+            if (res == false) {
+                return false;
+            }
+          
+            var Data =
+            {
+                'username': $('#UserName').val(),
+                'password': $('#UserPassword').val(),
+                'token': 'Token String',
+            };
+            //alert(rootUrl + "api/Token/CreateToken");
+            $.ajax({
+                url: rootUrl + "api/Token/CreateToken",
+                method: 'Post',
+                contentType: "application/json;charset=utf-8",
+                dataType: 'Text',
+                data: JSON.stringify(Data),
+                options:
+                {
+                    expiresIn: 86400
+                },
+                // When the request completes successfully,save the access token in the browser session storage
+                success: function (response) {
+                   // alert('OK');
+                    sessionStorage.setItem("UserName", $('#UserName').val());
+                    sessionStorage.setItem("accessToken", response);
+                    location.href = rootUrl + "Home/Dashboard";
+                },
+                // Display errors if any in the Bootstrap alert <div>
+                error: function (jqXHR) {
+                   // alert(jqXHR);
+                    alert('User is not authorized.');
+                },
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    function Authorize() {
+        var token = sessionStorage.getItem("accessToken");
+        if (token == null) {
+            alert('Token has expired.');
+            return false
+        }
+        var Data =
+        {
+            'username': $('#UserName').val(),
+            'password': $('#UserPasswordrootUrl').val(),
+            'token': token,
+        };
+        $.ajax({
+            method: 'Post',
+            url: rootUrl + "api/Token/Authorize",
+            dataType: 'Text',
+            async: false,
+            data: JSON.stringify(Data),
+            contentType: "application/json;charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function (result) {
+                var UserAttributes = new Array();
+                UserAttributes = result.split("_");
+                $('#UserName').val(UserAttributes[1]);
+                $('#User_ID').val(UserAttributes[2]);
+                $('#basePath').val(UserAttributes[3]);
+                sessionStorage.setItem("UserAttributes", UserAttributes);
+            },
+            error: function (result) {
+
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    // Authenticate token
+    function Authenticate() {
+        // debugger;
+        var token = sessionStorage.getItem("accessToken");
+        if (token == null) {
+            alert('Token has expired.');
+            return false
+        }
+        $.ajax
+            ({
+                type: "GET",
+                url: basePath + "api/Token/Authorize",
+                dataType: 'json',
+                async: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                },
+                success: function (result) {
+                    var total = result.length;
+                    if (total != 0) {
+                        var UserArray = new Array();
+                        UserArray = result.split("_");
+                        var User_Name = UserArray[1];
+                        sessionStorage.setItem("Emp_Name", User_Name);
+                        sessionStorage.setItem("UserAttributes", result);
+                    }
+                    // alert('User has Authenticated');
+                }
+            });
+    }
+</script>
